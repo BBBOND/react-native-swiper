@@ -14,7 +14,7 @@ import {
   ActivityIndicator
 } from 'react-native'
 
-const { width, height } = Dimensions.get('window')
+const {width, height} = Dimensions.get('window')
 
 /**
  * Default styles
@@ -165,7 +165,7 @@ export default class extends Component {
 
   componentWillReceiveProps (nextProps) {
     const sizeChanged = (nextProps.width || width) !== this.state.width ||
-                        (nextProps.height || height) !== this.state.height
+      (nextProps.height || height) !== this.state.height
     if (!nextProps.autoplay && this.autoplayTimer) clearTimeout(this.autoplayTimer)
     this.setState(this.initState(nextProps, sizeChanged))
   }
@@ -239,7 +239,7 @@ export default class extends Component {
     const i = this.state.index + (this.props.loop ? 1 : 0)
     const scrollView = this.refs.scrollView
     this.loopJumpTimer = setTimeout(() => scrollView.setPageWithoutAnimation &&
-      scrollView.setPageWithoutAnimation(i), 50)
+    scrollView.setPageWithoutAnimation(i), 50)
   }
 
   /**
@@ -258,7 +258,7 @@ export default class extends Component {
             ? this.state.index === this.state.total - 1
             : this.state.index === 0
         )
-      ) return this.setState({ autoplayEnd: true })
+      ) return this.setState({autoplayEnd: true})
 
       this.scrollBy(this.props.autoplayDirection ? 1 : -1)
     }, this.props.autoplayTimeout * 1000)
@@ -305,10 +305,10 @@ export default class extends Component {
    * @param {object} e native event
    */
   onScrollEndDrag = e => {
-    const { contentOffset } = e.nativeEvent
-    const { horizontal, children } = this.props
-    const { index } = this.state
-    const { offset } = this.internals
+    const {contentOffset} = e.nativeEvent
+    const {horizontal, children} = this.props
+    const {index} = this.state
+    const {offset} = this.internals
     const previousOffset = horizontal ? offset.x : offset.y
     const newOffset = horizontal ? contentOffset.x : contentOffset.y
 
@@ -364,10 +364,10 @@ export default class extends Component {
       // so we increment it by 1 then immediately set it to what it should be,
       // after render.
       if (offset[dir] === this.state.offset[dir]) {
-        newState.offset = { x: 0, y: 0 }
+        newState.offset = {x: 0, y: 0}
         newState.offset[dir] = offset[dir] + 1
         this.setState(newState, () => {
-          this.setState({ offset: offset }, cb)
+          this.setState({offset: offset}, cb)
         })
       } else {
         newState.offset = offset
@@ -393,11 +393,7 @@ export default class extends Component {
     if (state.dir === 'x') x = diff * state.width
     if (state.dir === 'y') y = diff * state.height
 
-    if (Platform.OS === 'android') {
-      this.refs.scrollView && this.refs.scrollView[animated ? 'setPage' : 'setPageWithoutAnimation'](diff)
-    } else {
-      this.refs.scrollView && this.refs.scrollView.scrollTo({ x, y, animated })
-    }
+    this.refs.scrollView && this.refs.scrollView.scrollTo({x, y, animated})
 
     // update scroll state
     this.internals.isScrolling = true
@@ -422,14 +418,14 @@ export default class extends Component {
     let overrides = {}
 
     /*
-    const scrollResponders = [
-      'onMomentumScrollBegin',
-      'onTouchStartCapture',
-      'onTouchStart',
-      'onTouchEnd',
-      'onResponderRelease',
-    ]
-    */
+     const scrollResponders = [
+     'onMomentumScrollBegin',
+     'onTouchStartCapture',
+     'onTouchStart',
+     'onTouchEnd',
+     'onResponderRelease',
+     ]
+     */
 
     for (let prop in props) {
       // if(~scrollResponders.indexOf(prop)
@@ -451,30 +447,30 @@ export default class extends Component {
    * @return {object} react-dom
    */
   renderPagination = () => {
-     // By default, dots only show when `total` >= 2
+    // By default, dots only show when `total` >= 2
     if (this.state.total <= 1) return null
 
     let dots = []
     const ActiveDot = this.props.activeDot || <View style={[{
-      backgroundColor: this.props.activeDotColor || '#007aff',
-      width: 8,
-      height: 8,
-      borderRadius: 4,
-      marginLeft: 3,
-      marginRight: 3,
-      marginTop: 3,
-      marginBottom: 3
-    }, this.props.activeDotStyle]} />
+        backgroundColor: this.props.activeDotColor || '#007aff',
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        marginLeft: 3,
+        marginRight: 3,
+        marginTop: 3,
+        marginBottom: 3
+      }, this.props.activeDotStyle]}/>
     const Dot = this.props.dot || <View style={[{
-      backgroundColor: this.props.dotColor || 'rgba(0,0,0,.2)',
-      width: 8,
-      height: 8,
-      borderRadius: 4,
-      marginLeft: 3,
-      marginRight: 3,
-      marginTop: 3,
-      marginBottom: 3
-    }, this.props.dotStyle ]} />
+        backgroundColor: this.props.dotColor || 'rgba(0,0,0,.2)',
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        marginLeft: 3,
+        marginRight: 3,
+        marginTop: 3,
+        marginBottom: 3
+      }, this.props.dotStyle]}/>
     for (let i = 0; i < this.state.total; i++) {
       dots.push(i === this.state.index
         ? React.cloneElement(ActiveDot, {key: i})
@@ -545,28 +541,17 @@ export default class extends Component {
   }
 
   renderScrollView = pages => {
-    if (Platform.OS === 'ios') {
-      return (
-        <ScrollView ref='scrollView'
-          {...this.props}
-          {...this.scrollViewPropOverrides()}
-          contentContainerStyle={[styles.wrapper, this.props.style]}
-          contentOffset={this.state.offset}
-          onScrollBeginDrag={this.onScrollBegin}
-          onMomentumScrollEnd={this.onScrollEnd}
-          onScrollEndDrag={this.onScrollEndDrag}>
-          {pages}
-        </ScrollView>
-       )
-    }
     return (
-      <ViewPagerAndroid ref='scrollView'
-        {...this.props}
-        initialPage={this.props.loop ? this.state.index + 1 : this.state.index}
-        onPageSelected={this.onScrollEnd}
-        style={{flex: 1}}>
+      <ScrollView ref='scrollView'
+                  {...this.props}
+                  {...this.scrollViewPropOverrides()}
+                  contentContainerStyle={[styles.wrapper, this.props.style]}
+                  contentOffset={this.state.offset}
+                  onScrollBeginDrag={this.onScrollBegin}
+                  onMomentumScrollEnd={this.onScrollEnd}
+                  onScrollEndDrag={this.onScrollEndDrag}>
         {pages}
-      </ViewPagerAndroid>
+      </ScrollView>
     )
   }
 
